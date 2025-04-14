@@ -24,7 +24,8 @@ import cv2
 import shutil
 from pathlib import Path
 from urllib.parse import urlparse
-
+import wandb
+wandb.init(project="SVD")
 import accelerate
 import numpy as np
 import PIL
@@ -1125,15 +1126,16 @@ def main():
                         with torch.autocast(
                             str(accelerator.device).replace(":0", ""), enabled=accelerator.mixed_precision == "fp16"
                         ):
+                            val_images = os.listdir("demo")
                             for val_img_idx in range(args.num_validation_images):
                                 num_frames = args.num_frames
                                 video_frames = pipeline(
-                                    load_image('demo.jpg').resize((args.width, args.height)),
+                                    load_image("demo/" + val_images[val_img_idx]).resize((args.width, args.height)),
                                     height=args.height,
                                     width=args.width,
                                     num_frames=num_frames,
                                     decode_chunk_size=8,
-                                    motion_bucket_id=127,
+                                    motion_bucket_id=200,
                                     fps=7,
                                     noise_aug_strength=0.02,
                                     # generator=generator,
@@ -1148,14 +1150,14 @@ def main():
                                     img = video_frames[i]
                                     video_frames[i] = np.array(img)
                                 export_to_gif(video_frames, out_file, 8)
-
+                                wandb.log({"output":wandb.Image(out_file)})
                         if args.use_ema:
                             # Switch back to the original UNet parameters.
                             ema_unet.restore(unet.parameters())
 
                         del pipeline
                         torch.cuda.empty_cache()
-
+            wandb.log({"loss": loss.detach()}) 
             logs = {"step_loss": loss.detach().item(
             ), "lr": lr_scheduler.get_last_lr()[0]}
             progress_bar.set_postfix(**logs)
