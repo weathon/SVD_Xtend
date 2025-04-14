@@ -1090,11 +1090,7 @@ def main():
                             args.output_dir, f"checkpoint-{global_step}")
                         accelerator.save_state(save_path)
                         logger.info(f"Saved state to {save_path}")
-                        upload_folder(
-                            repo_id=repo_id,
-                            folder_path=save_path,
-                            commit_message="Checkpoint",
-                        )
+
                     # sample images!
                     if (
                         (global_step % args.validation_steps == 0)
