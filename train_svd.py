@@ -1135,7 +1135,7 @@ def main():
                                     width=args.width,
                                     num_frames=num_frames,
                                     decode_chunk_size=8,
-                                    motion_bucket_id=200,
+                                    motion_bucket_id=178,
                                     fps=7,
                                     noise_aug_strength=0.02,
                                     # generator=generator,
