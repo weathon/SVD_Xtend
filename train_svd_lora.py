@@ -1128,7 +1128,7 @@ def main():
                                     img = video_frames[i]
                                     video_frames[i] = np.array(img)
                                 export_to_gif(video_frames, out_file, 8)
-                                wandb.log({"out": wandb.Video(out_file.replace("mp4", "gif")})
+                                wandb.log({"out": wandb.Video(out_file.replace("mp4", "gif"))})
 
                         del pipeline
                         torch.cuda.empty_cache()
