@@ -25,6 +25,7 @@ import shutil
 from pathlib import Path
 from urllib.parse import urlparse
 import wandb
+wandb.init(project="SVD")
 import accelerate
 import numpy as np
 import PIL
