@@ -1150,7 +1150,7 @@ def main():
                                     img = video_frames[i]
                                     video_frames[i] = np.array(img)
                                 export_to_gif(video_frames, out_file, 8)
-                                wandb.log({"output":wandb.Video(out_file+".gif")})
+                                wandb.log({"output":wandb.Video(out_file.replace(".mp4", ".gif"))})
                         if args.use_ema:
                             # Switch back to the original UNet parameters.
                             ema_unet.restore(unet.parameters())
