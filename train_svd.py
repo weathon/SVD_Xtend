@@ -1090,6 +1090,11 @@ def main():
                             args.output_dir, f"checkpoint-{global_step}")
                         accelerator.save_state(save_path)
                         logger.info(f"Saved state to {save_path}")
+                        upload_folder(
+                            repo_id=repo_id,
+                            folder_path=save_path,
+                            commit_message="Checkpoint",
+                        )
                     # sample images!
                     if (
                         (global_step % args.validation_steps == 0)
@@ -1135,7 +1140,7 @@ def main():
                                     width=args.width,
                                     num_frames=num_frames,
                                     decode_chunk_size=8,
-                                    motion_bucket_id=130,
+                                    motion_bucket_id=150,
                                     fps=7,
                                     noise_aug_strength=0.02,
                                     # generator=generator,
