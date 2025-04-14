@@ -24,7 +24,7 @@ import cv2
 import shutil
 from pathlib import Path
 from urllib.parse import urlparse
-
+import wandb
 import accelerate
 import numpy as np
 import PIL
@@ -901,7 +901,7 @@ def main():
     progress_bar = tqdm(range(global_step, args.max_train_steps),
                         disable=not accelerator.is_local_main_process)
     progress_bar.set_description("Steps")
-
+    global wandb
     for epoch in range(first_epoch, args.num_train_epochs):
         unet.train()
         train_loss = 0.0
@@ -1128,10 +1128,11 @@ def main():
                                     img = video_frames[i]
                                     video_frames[i] = np.array(img)
                                 export_to_gif(video_frames, out_file, 8)
+                                wandb.log({"out": wandb.Video(out_file.replace("mp4", "gif")})
 
                         del pipeline
                         torch.cuda.empty_cache()
-
+            wandb.log({"loss": loss.detach()})
             logs = {"step_loss": loss.detach().item(
             ), "lr": lr_scheduler.get_last_lr()[0]}
             progress_bar.set_postfix(**logs)
