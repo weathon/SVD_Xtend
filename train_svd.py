@@ -928,7 +928,7 @@ def main():
     progress_bar = tqdm(range(global_step, args.max_train_steps),
                         disable=not accelerator.is_local_main_process)
     progress_bar.set_description("Steps")
-
+    global wandb
     for epoch in range(first_epoch, args.num_train_epochs):
         unet.train()
         train_loss = 0.0
